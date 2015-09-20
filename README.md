@@ -3,3 +3,5 @@ A tool created with D and the Derelict SDL bindings. Used to create xml files th
 
 ## Dependencies
 * [SDL 2.0](https://www.libsdl.org/download-2.0.php)
+* [DerelictSDL2](https://github.com/DerelictOrg/DerelictSDL2)
+* [DerelictUtil](https://github.com/DerelictOrg/DerelictUtil)

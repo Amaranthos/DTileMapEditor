@@ -1,7 +1,6 @@
 module app;
 
 import std.stdio;
-import std.algorithm;
 import std.math;
 import std.conv;
 import std.file;
@@ -13,6 +12,7 @@ import window;
 import texture;
 import colour;
 import button;
+import rect;
 
 static bool isLogging = false;
 static int wWidth = 960;
@@ -20,13 +20,16 @@ static int wHeight = 720;
 
 class App {
 	//Member variables
-	static App inst;
-
-	Window window = new Window();
-	
-	Colour drawColour = Colour(236, 85, 142);
+	private static App inst;
+	private	Window window = new Window();	
+	private Colour drawColour = Colour(236, 85, 142);
 
 	File file;
+
+	//Getter functions
+	public Window GetWindow () @property {
+		return window;
+	}
 
 	//Member functions
 	static public App Inst() {
@@ -51,6 +54,10 @@ class App {
 		}
 
 		if(isLogging) file.writeln(stderr, "Initialisation successful: ", success);
+
+		SDL_Rect rect = SDL_Rect(0,0,0,0);
+
+		BuildRect(rect);
 
 		return success;
 	}
@@ -86,21 +93,6 @@ class App {
 			if(isLogging) file.writeln(stderr, "Rendering window");	
 			window.Render();
 		}
-	}
-
-	private SDL_Rect BuildRect (ref SDL_Rect rect) {
-		int x1 = rect.x;
-		int y1 = rect.y;
-		int x2 = rect.w;
-		int y2 = rect.h;
-
-		rect.x = min(x1, x2);
-		rect.y = min(y1, y2);
-
-		rect.w = max(x1, x2) - rect.x;
-		rect.h = max(y1, y2) - rect.y;
-
-		return rect;
 	}
 
 	public void Close() {

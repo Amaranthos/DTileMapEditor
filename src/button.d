@@ -2,7 +2,6 @@ module button;
 
 import std.stdio;
 
-
 import derelict.sdl2.sdl;
 
 import window;
