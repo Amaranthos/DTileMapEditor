@@ -1,0 +1,21 @@
+{
+	"folders":
+	[
+		{
+			"path": "."
+		}
+	],
+	"build_systems":
+	[
+		{
+			"name" : "build",
+			"cmd": ["$folder/bash-build.sh"],
+    		"shell": true,
+    		"working_dir":"$folder",
+			"windows": 
+			{
+      			"cmd": ["$folder\\build.sh"]
+   			}
+		}
+	]
+}
