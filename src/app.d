@@ -24,10 +24,10 @@ class App {
 	private	Window window = new Window();	
 	private Colour drawColour = Colour(236, 85, 142);
 
-	File file;
+	File file; //Logging output file, write a better logger
 
 	//Getter functions
-	public Window GetWindow () @property {
+	public Window GetWindow() {
 		return window;
 	}
 

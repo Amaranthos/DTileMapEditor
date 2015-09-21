@@ -13,7 +13,7 @@ void main() {
 	try{
 		DerelictSDL2.load();
 
-		if(!App.Inst.Init()) writeln("Warning: Draw Client failed to init!");
+		if(!App.Inst.Init()) writeln("Warning: App failed to init!");
 		else App.Inst.Update();
 
 		App.Inst.Close();

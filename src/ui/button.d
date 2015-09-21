@@ -1,4 +1,4 @@
-module ui.button;
+module button;
 
 import std.stdio;
 
