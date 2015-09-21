@@ -1,4 +1,4 @@
-module texture;
+module textures.texture;
 
 import std.stdio;
 import std.string;

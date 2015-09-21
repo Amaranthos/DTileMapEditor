@@ -9,7 +9,7 @@ import std.string;
 import derelict.sdl2.sdl;
 
 import window;
-import texture;
+import textures;
 import colour;
 import button;
 import rect;
@@ -38,7 +38,7 @@ class App {
 	}
 
 	public bool Init() {
-		if(isLogging) file = File("log.txt", "w");
+		if(isLogging) file = File("log/log.txt", "w");
 		if(isLogging) file.writeln(stderr, "Initialising");
 
 		bool success = true;

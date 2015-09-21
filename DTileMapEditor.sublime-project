@@ -9,7 +9,7 @@
 	[
 		{
 			"name" : "build",
-			"cmd": ["$folder/bash-build.sh"],
+			"cmd": ["$folder/build.sh"],
     		"shell": true,
     		"working_dir":"$folder",
 			"windows": 

@@ -6,7 +6,7 @@ import derelict.sdl2.sdl;
 
 import window;
 import colour;
-import texture;
+import textures.texture;
 
 class Button {
 	public SDL_Rect pos;
