@@ -1,12 +1,17 @@
-module button;
+module ui.button;
 
 import std.stdio;
+import std.string;
 
 import derelict.sdl2.sdl;
 
+import app;
 import window;
 import colour;
 import textures.texture;
+import textures.manager;
+import tiles.tile;
+import math.vec2;
 
 class Button {
 	public SDL_Rect pos;
@@ -15,9 +20,19 @@ class Button {
 	public Colour outlineColour;
 	public Colour selectColour;
 
-	public Texture image = null;
+	private Texture image = null;
+	private Tile tile = null;
 
 	public bool isSelected = false;
+
+	//Getters and Setters
+	public void SetImage(string image){
+		this.image = App.Inst.TextureMan().Get(image);
+	}
+
+	public void SetTile(string tile) {
+		this.tile = App.Inst.TileMan.Get(tile);
+	}
 
 	this(SDL_Rect pos = SDL_Rect(0,0,0,0), Colour fill = Colour(0,0,0), Colour outline = Colour(255, 255, 255), Colour select = Colour.Yellow) {
 		this.pos = pos;
@@ -44,7 +59,11 @@ class Button {
 		SDL_RenderFillRect(window.renderer, &pos);
 		
 		if(image)
-			image.Render(pos.x, pos.y, window);
+			image.Render(pos.x, pos.y, window, null);
+		else if(tile){
+			tile.SetPosition(new Vec2(pos.x, pos.y));
+			tile.Draw();
+		}
 		if(isSelected)
 			SDL_SetRenderDrawColor(window.renderer, selectColour.r, selectColour.g, selectColour.b, selectColour.a);
 		else

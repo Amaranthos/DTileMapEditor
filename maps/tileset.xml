@@ -1,0 +1,10 @@
+<tileset>
+	<image path="img/tileset.bmp" tilesize="32">
+		<tile index="0" x="0" y="0" cost="0" name="dirt_01"/>
+		<tile index="1" x="1" y="0" cost="0" name="dirt_02"/>
+		<tile index="2" x="0" y="1" cost="0" name="grass_01"/>
+		<tile index="3" x="1" y="1" cost="0" name="flowers_01"/>
+		<tile index="4" x="0" y="2" cost="0" name="sand_01"/>
+		<tile index="5" x="1" y="6" cost="0" name="brick_01"/>
+	</image>
+</tileset>

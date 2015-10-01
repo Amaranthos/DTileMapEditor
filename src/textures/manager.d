@@ -25,17 +25,20 @@ class TextureManager {
 		else {
 			Texture texture = new Texture();
 
-			if(!(texture.LoadFromFile(name, App.Inst.GetWindow)))
+			if(!(texture.LoadFromFile(name, App.Inst.GetWindow))){
+				
 				delete texture;
+			}
 
 			textures[name] = texture;
+
+			
 			return texture;
 		}
 	}
 
 	public void RemoveAll() {
 		foreach(texture; textures.keys){
-			delete texture;
 			textures.remove(texture);
 		}		
 	}

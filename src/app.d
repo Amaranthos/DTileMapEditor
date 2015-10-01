@@ -10,8 +10,8 @@ import derelict.sdl2.sdl;
 
 import window;
 import textures;
+import tiles;
 import colour;
-import button;
 import rect;
 
 static bool isLogging = false;
@@ -22,6 +22,8 @@ class App {
 	//Member variables
 	private static App inst;
 	private	Window window = new Window();	
+	private TextureManager textureMan = new TextureManager();
+	private TileManager tileMan = new TileManager();
 	private Colour drawColour = Colour(236, 85, 142);
 
 	File file; //Logging output file, write a better logger
@@ -29,6 +31,14 @@ class App {
 	//Getter functions
 	public Window GetWindow() {
 		return window;
+	}
+
+	public TextureManager TextureMan() {
+		return textureMan;
+	}
+
+	public TileManager TileMan() {
+		return tileMan;
 	}
 
 	//Member functions
@@ -67,6 +77,8 @@ class App {
 		bool quit = false;
 		SDL_Event event;
 
+		tileMan.LoadTileset("maps/tileset.xml");
+
 		while(!quit) {
 			stdout.flush();
 			if(isLogging) file.writeln(stderr, "Polling events");
@@ -99,6 +111,8 @@ class App {
 		if(isLogging) file.writeln(stderr, "Closing application");
 
 		delete window;
+		delete tileMan;
+		delete textureMan;
 
 		SDL_Quit();
 	}

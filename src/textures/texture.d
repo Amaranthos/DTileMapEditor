@@ -2,10 +2,10 @@ module textures.texture;
 
 import std.stdio;
 import std.string;
-
 import std.c.string;
 
 import derelict.sdl2.sdl;
+import derelict.sdl2.image;
 
 import window;
 
@@ -24,6 +24,7 @@ class Texture{
 	}
 
 	public bool LoadFromFile(string path, Window window) {
+		writeln("Loading file ", path);
 		Free();
 
 		SDL_Texture* newTexture = null;
@@ -57,18 +58,24 @@ class Texture{
 					pixels = null;
 					writeln("Success: Loaded image: ", path);
 				}
-				else writeln("Warning: Unable to load image: ", path);
+				else writeln("Warning: Unable to create texture from image: ", path);
 				SDL_FreeSurface(format);
 			}
+			else writeln("Warning: Unable to set texture format for image: ", path);
 			SDL_FreeSurface(load);
 		}
+		else writeln("Warning: Unable to load image: ", path);
 		texture = newTexture;
 		return !!texture;
 	}
 
-	public void Render(int x, int y, Window window) {
+	public void Render(int x, int y, Window window, SDL_Rect* clip) {
 		SDL_Rect quad = SDL_Rect(x, y, width, height);
-		SDL_RenderCopyEx(window.renderer, texture, null, &quad, 0, null, SDL_FLIP_NONE);
+		if(clip){
+			quad.w = clip.w;
+			quad.h = clip.h;
+		}
+		SDL_RenderCopyEx(window.renderer, texture, clip, &quad, 0, null, SDL_FLIP_NONE);
 	}
 
 	public void CreateBlank(int width, int height, Window window, SDL_TextureAccess access = SDL_TEXTUREACCESS_STREAMING){
