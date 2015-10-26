@@ -13,10 +13,11 @@ import textures;
 import tiles;
 import colour;
 import rect;
+import ui;
 
-static bool isLogging = false;
-static int wWidth = 960;
-static int wHeight = 720;
+enum isLogging = false;
+enum wWidth = 960;
+enum wHeight = 720;
 
 class App {
 	//Member variables
@@ -25,19 +26,19 @@ class App {
 	private TextureManager textureMan = new TextureManager();
 	private TileManager tileMan = new TileManager();
 	private Colour drawColour = Colour(236, 85, 142);
-
+	private Button[] tiles;
 	File file; //Logging output file, write a better logger
 
 	//Getter functions
-	public Window GetWindow() {
+	public Window AppWindow(){
 		return window;
 	}
 
-	public TextureManager TextureMan() {
+	public TextureManager TextureMan(){
 		return textureMan;
 	}
 
-	public TileManager TileMan() {
+	public TileManager TileMan(){
 		return tileMan;
 	}
 

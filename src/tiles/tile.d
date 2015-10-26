@@ -9,26 +9,35 @@ import math.vec2;
 import app;
 
 class Tile {
+private:
+	Texture texture_;
+	SDL_Rect tile_;
+	Vec2 position_;
 
-	private Texture texture;
-	private SDL_Rect tile;
-	private Vec2 position;
-
-	public this(SDL_Rect tile, Texture texture) {
-		this.tile = tile;
-		this.texture = texture;
+public:
+	this(SDL_Rect tile, Texture texture) {
+		tile_ = tile;
+		texture_ = texture;
 	}
 
-	public ~this() {
+	~this() {
 
 	}
 
-	public void SetPosition(Vec2 position) {
-		this.position = position;
+	const(Texture) texture() const @property{
+		return texture_;
 	}
 
-	public void Draw() {
+	const(Vec2) position() const @property{
+		return position_;
+	}
+
+	void position(Vec2 position) @property{
+		position_ = position;
+	}
+
+	void Draw() {
 		if(true) //Check on screen, when camera is implemented
-			texture.Render(cast(int)position.x, cast(int)position.y, App.Inst.GetWindow, &tile);
+			texture_.Render(cast(int)position_.x, cast(int)position_.y, App.Inst.AppWindow, &tile_);
 	}
 }

@@ -2,6 +2,7 @@ module window;
 
 import std.stdio;
 import std.string : toStringz;
+import std.conv : to;
 
 import derelict.sdl2.sdl;
 
@@ -12,6 +13,7 @@ class Window {
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	int windowID;
+	int displayID;
 	
 	int width;
 	int height;
@@ -60,6 +62,7 @@ class Window {
 				writeln("Success: SDL renderer created from window '", name, "'!");
 				SDL_SetRenderDrawColor(renderer, clear.r, clear.g, clear.b, clear.a);
 				windowID = SDL_GetWindowID(window);
+				displayID = SDL_GetWindowDisplayIndex(window);
 				shown = true;
 			}
 			else {
@@ -79,6 +82,11 @@ class Window {
 			bool updateCaption = false;
 
 			switch(e.window.event) {
+				case SDL_WINDOWEVENT_MOVED:
+					displayID = SDL_GetWindowDisplayIndex(window);
+					updateCaption = true;
+					break;
+
 				case SDL_WINDOWEVENT_SHOWN:
 					shown = true;
 					break;
@@ -139,7 +147,7 @@ class Window {
 
 			if(updateCaption) {
 				string caption;
-				caption ~= name ~ "- Mouse Focus: " ~ ((mouseFocus)? "On" : "Off") ~ " Keyboard Focus: " ~ ((keyboardFocus) ? "On" : "Off");
+				caption ~= name ~ "- Window: " ~ to!string(windowID) ~ " Display: " ~ to!string(displayID) ~ " Mouse Focus: " ~ ((mouseFocus)? "On" : "Off") ~ " Keyboard Focus: " ~ ((keyboardFocus) ? "On" : "Off");
 				SDL_SetWindowTitle(window, caption.toStringz);
 			}
 		}

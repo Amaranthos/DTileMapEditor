@@ -25,7 +25,7 @@ class TextureManager {
 		else {
 			Texture texture = new Texture();
 
-			if(!(texture.LoadFromFile(name, App.Inst.GetWindow))){
+			if(!(texture.LoadFromFile(name, App.Inst.AppWindow))){
 				
 				delete texture;
 			}

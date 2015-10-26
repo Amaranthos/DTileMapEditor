@@ -61,7 +61,7 @@ class Button {
 		if(image)
 			image.Render(pos.x, pos.y, window, null);
 		else if(tile){
-			tile.SetPosition(new Vec2(pos.x, pos.y));
+			tile.position(new Vec2(pos.x, pos.y));
 			tile.Draw();
 		}
 		if(isSelected)
