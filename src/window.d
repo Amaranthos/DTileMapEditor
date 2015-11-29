@@ -10,6 +10,7 @@ import colour;
 
 class Window {
 	//Member variables
+private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	int windowID;
@@ -26,7 +27,7 @@ class Window {
 	bool minimized;
 	bool shown;
 
-
+public:
 	public this() {
 		window = null;
 		renderer = null;

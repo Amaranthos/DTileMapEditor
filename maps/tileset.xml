@@ -1,5 +1,5 @@
 <tileset>
-	<image path="img/tileset.bmp" tilesize="32">
+	<image path="img/tileset.png" tilesize="32">
 		<tile index="0" x="0" y="0" cost="0" name="dirt_01"/>
 		<tile index="1" x="1" y="0" cost="0" name="dirt_02"/>
 		<tile index="2" x="0" y="1" cost="0" name="grass_01"/>

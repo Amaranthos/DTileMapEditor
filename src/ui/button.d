@@ -14,26 +14,40 @@ import tiles.tile;
 import math.vec2;
 
 class Button {
-	public SDL_Rect pos;
+private:
+	SDL_Rect pos;
+	Texture image = null;
+	Tile tile = null;
+	public bool isSelected = false;
 
+public:
 	public Colour fillColour;
 	public Colour outlineColour;
 	public Colour selectColour;
 
-	private Texture image = null;
-	private Tile tile = null;
 
-	public bool isSelected = false;
+	// Getters and Setters
+	void selected(bool selected) @property{
+		isSelected = selected;
+	}
 
-	//Getters and Setters
-	public void SetImage(string image){
+	const(SDL_Rect) position() const @property{
+		return pos;
+	}
+
+	void position(SDL_Rect position) @property{
+		pos = position;
+	}
+
+	void SetImage(string image){
 		this.image = App.Inst.TextureMan().Get(image);
 	}
 
-	public void SetTile(string tile) {
+	void SetTile(string tile) {
 		this.tile = App.Inst.TileMan.Get(tile);
 	}
 
+	// Member functions
 	this(SDL_Rect pos = SDL_Rect(0,0,0,0), Colour fill = Colour(0,0,0), Colour outline = Colour(255, 255, 255), Colour select = Colour.Yellow) {
 		this.pos = pos;
 		fillColour = fill;
@@ -45,45 +59,38 @@ class Button {
 
 	}
 
-	public void HandleEvent(ref SDL_Event e) {
+	void HandleEvent(ref SDL_Event e) {
 
 	}
 
-	public bool LoadButtonImage(string path, Window window) {
+	bool LoadButtonImage(string path, Window window) {
 		image = new Texture();
 		return image.LoadFromFile(path, window);
 	}
 
-	public void Render(Window window) {
-		SDL_SetRenderDrawColor(window.renderer, fillColour.r, fillColour.g, fillColour.b, fillColour.a);
-		SDL_RenderFillRect(window.renderer, &pos);
+	void Render(Window window, float scale = 1) {
+		SDL_SetRenderDrawColor(window.Renderer, fillColour.r, fillColour.g, fillColour.b, fillColour.a);
+		
+		// Scale button fill
+		SDL_RenderSetScale(window.Renderer, scale, scale);
+		SDL_RenderFillRect(window.Renderer, &pos);
+		SDL_RenderSetScale(window.Renderer, 1, 1);
 		
 		if(image)
 			image.Render(pos.x, pos.y, window, null);
 		else if(tile){
 			tile.position(new Vec2(pos.x, pos.y));
-			tile.Draw();
+			tile.Draw(window, scale);
 		}
+
 		if(isSelected)
-			SDL_SetRenderDrawColor(window.renderer, selectColour.r, selectColour.g, selectColour.b, selectColour.a);
+			SDL_SetRenderDrawColor(window.Renderer, selectColour.r, selectColour.g, selectColour.b, selectColour.a);
 		else
-			SDL_SetRenderDrawColor(window.renderer, outlineColour.r, outlineColour.g, outlineColour.b, outlineColour.a);
-		SDL_RenderDrawRect(window.renderer, &pos);
-	}
+			SDL_SetRenderDrawColor(window.Renderer, outlineColour.r, outlineColour.g, outlineColour.b, outlineColour.a);
 
-	public bool MouseOver(ref int x, ref int y) {
-		SDL_GetMouseState(&x, &y);
-
-		bool isIn = true;
-
-		if(x < pos.x) isIn = false;
-		else if(x > pos.x + pos.w) isIn = false;
-		else if (y < pos.y) isIn = false;
-		else if (y > pos.y + pos.h) isIn = false;
-
-		x -= pos.x;
-		y -= pos.y;
-		
-		return isIn;
+		// Scale button outline
+		SDL_RenderSetScale(window.Renderer, scale, scale);
+		SDL_RenderDrawRect(window.Renderer, &pos);
+		SDL_RenderSetScale(window.Renderer, 1, 1);
 	}
 }

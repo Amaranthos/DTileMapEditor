@@ -29,12 +29,12 @@ class Texture{
 
 		SDL_Texture* newTexture = null;
 
-		SDL_Surface* load = SDL_LoadBMP(path.toStringz);
+		SDL_Surface* load = IMG_Load(path.toStringz);
 
 		if(load) {
 			SDL_Surface* format = SDL_ConvertSurfaceFormat(load, SDL_PIXELFORMAT_RGBA8888, 0);
 			if(format) {
-				newTexture = SDL_CreateTexture(window.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, format.w, format.h);
+				newTexture = SDL_CreateTexture(window.Renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, format.w, format.h);
 
 				if(newTexture) {
 					SDL_SetTextureBlendMode(newTexture, SDL_BLENDMODE_BLEND);
@@ -69,17 +69,17 @@ class Texture{
 		return !!texture;
 	}
 
-	public void Render(int x, int y, Window window, SDL_Rect* clip) {
+	public void Render(int x, int y, Window window, SDL_Rect* clip, float scale = 1) {
 		SDL_Rect quad = SDL_Rect(x, y, width, height);
 		if(clip){
 			quad.w = clip.w;
 			quad.h = clip.h;
 		}
-		SDL_RenderCopyEx(window.renderer, texture, clip, &quad, 0, null, SDL_FLIP_NONE);
+		SDL_RenderCopyEx(window.Renderer, texture, clip, &quad, 0, null, SDL_FLIP_NONE);
 	}
 
 	public void CreateBlank(int width, int height, Window window, SDL_TextureAccess access = SDL_TEXTUREACCESS_STREAMING){
-		texture = SDL_CreateTexture(window.renderer, SDL_PIXELFORMAT_RGBA8888, access, width, height);
+		texture = SDL_CreateTexture(window.Renderer, SDL_PIXELFORMAT_RGBA8888, access, width, height);
 
 		if(texture) {
 			this.width = width;

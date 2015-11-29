@@ -20,16 +20,30 @@ enum wWidth = 960;
 enum wHeight = 720;
 
 class App {
-	//Member variables
-	private static App inst;
-	private	Window window = new Window();	
-	private TextureManager textureMan = new TextureManager();
-	private TileManager tileMan = new TileManager();
-	private Colour drawColour = Colour(236, 85, 142);
-	private Button[] tiles;
+
+private:
+	// Member variables
+	static App inst;
+	Window window = new Window();	
+	TextureManager textureMan = new TextureManager();
+	TileManager tileMan = new TileManager();
 	File file; //Logging output file, write a better logger
 
-	//Getter functions
+	// UI elements
+	enum tileUIPadding = 5;
+	enum tileUISepX = 2 * tileUIPadding + 32;
+	enum tileUISepY1 = 0;
+	enum tileUISepY2 = wHeight;
+
+	SDL_Rect canvas = SDL_Rect(2 * tileUISepX + 1, tileUISepY1, wWidth - tileUISepX, wHeight);
+	Button[] tileButtons;
+	int selectedTile = 0;
+
+	bool mouseOverCanvas = false;
+
+
+public:
+	// Getter and Setters
 	public Window AppWindow(){
 		return window;
 	}
@@ -42,13 +56,13 @@ class App {
 		return tileMan;
 	}
 
-	//Member functions
-	static public App Inst() {
+	// Member functions
+	static App Inst() {
 		if(!inst) inst = new App();
 		return inst;
 	}
 
-	public bool Init() {
+	bool Init() {
 		if(isLogging) file = File("log/log.txt", "w");
 		if(isLogging) file.writeln(stderr, "Initialising");
 
@@ -59,26 +73,22 @@ class App {
 			success = false;
 		}
 		else {
-			if(!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1")) writeln("Warning: Linear texture filtering not enabled!");
+			if(!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0")) writeln("Warning: Point texture filtering not enabled!");
 
 			if(!window.Init(wWidth, wHeight, "Tile Map Editor", Colour(0,0,0))) success = false;
 		}
 
 		if(isLogging) file.writeln(stderr, "Initialisation successful: ", success);
 
-		SDL_Rect rect = SDL_Rect(0,0,0,0);
-
-		BuildRect(rect);
+		tileMan.LoadTileset("maps/tileset.xml");
+		tileButtons = tileMan.CreateButtons(tileUIPadding, tileUIPadding, tileUIPadding, tileUIPadding, false, true);
 
 		return success;
 	}
 
-	public void Update() {
-			
+	void Update() {			
 		bool quit = false;
 		SDL_Event event;
-
-		tileMan.LoadTileset("maps/tileset.xml");
 
 		while(!quit) {
 			stdout.flush();
@@ -95,6 +105,19 @@ class App {
 							break;
 					}
 				}
+				else if(event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
+					foreach(i; 0..tileButtons.length){
+						if(MouseOver(tileButtons[i].position, 2)){
+							foreach(j; 0..tileButtons.length){
+								tileButtons[j].selected = false;
+							}
+							tileButtons[i].selected = true;
+							selectedTile = i;
+						}
+					}
+				}
+
+				mouseOverCanvas = MouseOver(canvas);
 
 				if(isLogging) file.writeln(stderr, "Window handling events");
 				window.HandleEvent(event);
@@ -103,12 +126,14 @@ class App {
 			if(isLogging) file.writeln(stderr, "Clear Window");
 			window.Clear();
 			
+			Draw();
+
 			if(isLogging) file.writeln(stderr, "Rendering window");	
 			window.Render();
 		}
 	}
 
-	public void Close() {
+	void Close() {
 		if(isLogging) file.writeln(stderr, "Closing application");
 
 		delete window;
@@ -116,5 +141,24 @@ class App {
 		delete textureMan;
 
 		SDL_Quit();
+	}
+
+private:
+	void Draw() {
+		foreach(i; 0..tileButtons.length){
+			if(i == selectedTile){
+				tileButtons[i].selected = true;
+			}
+			tileButtons[i].Render(window, 2);
+		}
+
+		SDL_SetRenderDrawColor(window.Renderer, Colour.Red.r, Colour.Red.g, Colour.Red.b, Colour.Red.a);
+		SDL_RenderDrawLine(window.Renderer, 2 * tileUISepX, tileUISepY1, 2 * tileUISepX, tileUISepY2);
+
+		if(mouseOverCanvas){
+			//textureMan
+		}
+
+		//textureMan.Get("img/tileset.png").Render(50, 100, window, null);
 	}
 }

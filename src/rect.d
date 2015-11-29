@@ -18,3 +18,18 @@ public SDL_Rect BuildRect (ref SDL_Rect rect) {
 
 	return rect;
 }
+
+public bool MouseOver (SDL_Rect rect, float scale = 1){
+	int x, y = 0;
+
+	SDL_GetMouseState(&x, &y);
+
+	bool isIn = true;
+
+	if(x < rect.x * cast(int)scale) isIn = false;
+	else if(x > (rect.x + rect.w) * cast(int)scale) isIn = false;
+	else if (y < rect.y * cast(int)scale) isIn = false;
+	else if (y > (rect.y + rect.h) * cast(int)scale) isIn = false;
+	
+	return isIn;
+}
