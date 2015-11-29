@@ -11,15 +11,16 @@ import textures.texture;
 class TextureManager {
 	private Texture[string] textures;
 
-	public this() {
+public:
+	this() {
 
 	}
 
-	public ~this() {
+	~this() {
 		RemoveAll();
 	}
 
-	public Texture Get (string name) {
+	Texture Get (string name) {
 		if(name in textures)
 			return textures[name];
 		else {
@@ -37,7 +38,7 @@ class TextureManager {
 		}
 	}
 
-	public void RemoveAll() {
+	void RemoveAll() {
 		foreach(texture; textures.keys){
 			textures.remove(texture);
 		}		

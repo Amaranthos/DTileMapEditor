@@ -17,13 +17,13 @@ class Button {
 private:
 	SDL_Rect pos;
 	Texture image = null;
-	Tile tile = null;
-	public bool isSelected = false;
+	Tile tile_ = null;
+	bool isSelected = false;
 
 public:
-	public Colour fillColour;
-	public Colour outlineColour;
-	public Colour selectColour;
+	Colour fillColour;
+	Colour outlineColour;
+	Colour selectColour;
 
 
 	// Getters and Setters
@@ -35,6 +35,10 @@ public:
 		return pos;
 	}
 
+	const(Tile) tile() const @property{
+		return tile_;
+	}
+
 	void position(SDL_Rect position) @property{
 		pos = position;
 	}
@@ -44,7 +48,7 @@ public:
 	}
 
 	void SetTile(string tile) {
-		this.tile = App.Inst.TileMan.Get(tile);
+		this.tile_ = App.Inst.TileMan.Get(tile);
 	}
 
 	// Member functions
@@ -78,9 +82,9 @@ public:
 		
 		if(image)
 			image.Render(pos.x, pos.y, window, null);
-		else if(tile){
-			tile.position(new Vec2(pos.x, pos.y));
-			tile.Draw(window, scale);
+		else if(tile_){
+			tile_.position(new Vec2(pos.x, pos.y));
+			tile_.Draw(window, scale);
 		}
 
 		if(isSelected)

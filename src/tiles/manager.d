@@ -17,15 +17,16 @@ import ui.button;
 class TileManager {
 	private Tile[string] tiles;	
 
-	public this() {
+public:
+	this() {
 
 	}
 
-	public ~this() {
+	~this() {
 		RemoveAll();
 	}
 
-	public void LoadTileset(string path) {
+	void LoadTileset(string path) {
 		RemoveAll();
 
 		if(path != ""){
@@ -49,7 +50,7 @@ class TileManager {
 						tile.x = to!int(e.tag.attr["x"]) * tile.w;
 						tile.y = to!int(e.tag.attr["y"]) * tile.h;
 
-						Add(new Tile(tile, texture), e.tag.attr["name"]);
+						Add(new Tile(tile, texture, e.tag.attr["name"]), e.tag.attr["name"]);
 					};
 					xml.parse();
 				};
@@ -61,21 +62,21 @@ class TileManager {
 		else writeln("Warning! Invalid path");
 	}
 
-	public void Add(Tile tile, string name) {
+	void Add(Tile tile, string name) {
 		tiles[name] = tile;
 	}
 
-	public Tile Get(string name){
+	Tile Get(string name){
 		return tiles[name];
 	}
 
-	public void RemoveAll(){
+	void RemoveAll(){
 		foreach(tile; tiles.keys){
 			tiles.remove(tile);
 		}
 	}
 
-	public Button[] CreateButtons(int startX, int startY, int padX, int padY, bool incrX, bool incrY) {
+	Button[] CreateButtons(int startX, int startY, int padX, int padY, bool incrX, bool incrY) {
 		Button[] ret;
 		
 		int x = 0;

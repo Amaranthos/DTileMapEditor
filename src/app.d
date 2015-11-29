@@ -14,10 +14,14 @@ import tiles;
 import colour;
 import rect;
 import ui;
+import grid;
+import math;
 
 enum isLogging = false;
 enum wWidth = 960;
 enum wHeight = 720;
+
+enum tileSize = 32;
 
 class App {
 
@@ -29,30 +33,32 @@ private:
 	TileManager tileMan = new TileManager();
 	File file; //Logging output file, write a better logger
 
+	Grid!(Tile) grid;
+
 	// UI elements
 	enum tileUIPadding = 5;
-	enum tileUISepX = 2 * tileUIPadding + 32;
+	enum tileUISepX = 2 * tileUIPadding + tileSize;
 	enum tileUISepY1 = 0;
 	enum tileUISepY2 = wHeight;
 
-	SDL_Rect canvas = SDL_Rect(2 * tileUISepX + 1, tileUISepY1, wWidth - tileUISepX, wHeight);
+	SDL_Rect canvas = SDL_Rect(2 * tileUISepX + 2, tileUISepY1, wWidth - tileUISepX, wHeight);
 	Button[] tileButtons;
-	int selectedTile = 0;
+	string selectedTile = "";
 
 	bool mouseOverCanvas = false;
 
 
 public:
 	// Getter and Setters
-	public Window AppWindow(){
+	Window AppWindow(){
 		return window;
 	}
 
-	public TextureManager TextureMan(){
+	TextureManager TextureMan(){
 		return textureMan;
 	}
 
-	public TileManager TileMan(){
+	TileManager TileMan(){
 		return tileMan;
 	}
 
@@ -83,10 +89,12 @@ public:
 		tileMan.LoadTileset("maps/tileset.xml");
 		tileButtons = tileMan.CreateButtons(tileUIPadding, tileUIPadding, tileUIPadding, tileUIPadding, false, true);
 
+		grid = new Grid!(Tile)(canvas.w / tileSize, canvas.h / tileSize, tileSize);
+
 		return success;
 	}
 
-	void Update() {			
+	void Update() {
 		bool quit = false;
 		SDL_Event event;
 
@@ -112,8 +120,24 @@ public:
 								tileButtons[j].selected = false;
 							}
 							tileButtons[i].selected = true;
-							selectedTile = i;
+							selectedTile = tileButtons[i].tile.name;
 						}
+					}
+
+					if(mouseOverCanvas && selectedTile != ""){
+						int x, y = 0;
+						SDL_GetMouseState(&x, &y);
+
+						x -= canvas.x;
+						y -= canvas.y;
+
+						x /= 32;
+						y /= 32;
+
+						Tile tile = tileMan.Get(selectedTile);
+
+						//tile.position = new Vec2(100, 100);
+						grid.Set(tile, cast(uint)x, cast(uint)y);
 					}
 				}
 
@@ -146,17 +170,36 @@ public:
 private:
 	void Draw() {
 		foreach(i; 0..tileButtons.length){
-			if(i == selectedTile){
-				tileButtons[i].selected = true;
-			}
 			tileButtons[i].Render(window, 2);
 		}
 
 		SDL_SetRenderDrawColor(window.Renderer, Colour.Red.r, Colour.Red.g, Colour.Red.b, Colour.Red.a);
 		SDL_RenderDrawLine(window.Renderer, 2 * tileUISepX, tileUISepY1, 2 * tileUISepX, tileUISepY2);
 
-		if(mouseOverCanvas){
-			//textureMan
+		if(mouseOverCanvas && selectedTile != ""){
+			int x, y = 0;
+			SDL_GetMouseState(&x, &y);
+
+			x -= canvas.x;
+			y -= canvas.y;
+
+			x /= 32;
+			y /= 32;
+
+			Tile tile = tileMan.Get(selectedTile);
+
+			tile.position = new Vec2(x * tileSize + canvas.x, y * tileSize + canvas.y);
+			tile.Draw(window);
+
+		}
+
+		for(int i = 0; i < grid.cols; i++){
+			for(int j = 0; j < grid.rows; j++){
+				if(grid.grid[i + j * grid.cols]){
+					grid.grid[i + j * grid.cols].position = new Vec2(i * tileSize + canvas.x, j * tileSize + canvas.y);
+					grid.grid[i + j * grid.cols].Draw(window);
+				}
+			}
 		}
 
 		//textureMan.Get("img/tileset.png").Render(50, 100, window, null);

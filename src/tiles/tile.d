@@ -11,14 +11,16 @@ import window;
 
 class Tile {
 private:
-	Texture texture_;
+	Texture img;
 	SDL_Rect tile_;
 	Vec2 pos;
+	string name_;
 
 public:
-	this(SDL_Rect tile, Texture texture) {
-		tile_ = tile;
-		texture_ = texture;
+	this(SDL_Rect tile, Texture texture, string name) {
+		this.tile_ = tile;
+		this.img = texture;
+		this.name_ = name;
 	}
 
 	~this() {
@@ -26,7 +28,7 @@ public:
 	}
 
 	const(Texture) texture() const @property{
-		return texture_;
+		return img;
 	}
 
 	const(Vec2) position() const @property{
@@ -41,6 +43,10 @@ public:
 		return tile_.h;
 	}
 
+	const(string) name() const @property {
+		return name_;
+	}
+
 	void position(Vec2 position) @property{
 		pos = position;
 	}
@@ -48,7 +54,7 @@ public:
 	void Draw(Window window, float scale = 1) {
 		if(true){ //Check on screen, when camera is implemented
 			SDL_RenderSetScale(window.Renderer, scale, scale);
-			texture_.Render(cast(int)pos.x, cast(int)pos.y, App.Inst.AppWindow, &tile_);
+			img.Render(cast(int)pos.x, cast(int)pos.y, App.Inst.AppWindow, &tile_);
 			SDL_RenderSetScale(window.Renderer, 1, 1);
 		}
 	}

@@ -7,11 +7,15 @@ import std.stdio;
 
 import derelict.sdl2.sdl;
 import derelict.sdl2.image;
+import derelict.util.exception;
 
 import app;
 
 void main() {
 	try{
+		DerelictSDL2.missingSymbolCallback = (string) => ShouldThrow.No;
+		DerelictSDL2Image.missingSymbolCallback = (string) => ShouldThrow.No;
+
 		DerelictSDL2.load();
 		DerelictSDL2Image.load();
 
@@ -21,7 +25,7 @@ void main() {
 		App.Inst.Close();
 	}
 	catch(Exception e) {
-		writeln("Exception %s", e.msg);
+		writeln("Exception: ", e.msg);
 		throw(e);
 	}
 }

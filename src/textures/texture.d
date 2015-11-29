@@ -10,10 +10,12 @@ import derelict.sdl2.image;
 import window;
 
 class Texture{
-	public SDL_Texture* texture;
-	public void* pixels;
 
-	public int pitch, width, height;
+public:
+	SDL_Texture* texture;
+	void* pixels;
+
+	int pitch, width, height;
 
 	this() {
 
@@ -23,7 +25,7 @@ class Texture{
 		Free();
 	}
 
-	public bool LoadFromFile(string path, Window window) {
+	bool LoadFromFile(string path, Window window) {
 		writeln("Loading file ", path);
 		Free();
 
@@ -69,7 +71,7 @@ class Texture{
 		return !!texture;
 	}
 
-	public void Render(int x, int y, Window window, SDL_Rect* clip, float scale = 1) {
+	void Render(int x, int y, Window window, SDL_Rect* clip, float scale = 1) {
 		SDL_Rect quad = SDL_Rect(x, y, width, height);
 		if(clip){
 			quad.w = clip.w;
@@ -78,7 +80,7 @@ class Texture{
 		SDL_RenderCopyEx(window.Renderer, texture, clip, &quad, 0, null, SDL_FLIP_NONE);
 	}
 
-	public void CreateBlank(int width, int height, Window window, SDL_TextureAccess access = SDL_TEXTUREACCESS_STREAMING){
+	void CreateBlank(int width, int height, Window window, SDL_TextureAccess access = SDL_TEXTUREACCESS_STREAMING){
 		texture = SDL_CreateTexture(window.Renderer, SDL_PIXELFORMAT_RGBA8888, access, width, height);
 
 		if(texture) {
