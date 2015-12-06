@@ -29,7 +29,7 @@ private:
 	bool shown;
 
 public:
-	public this() {
+	this() {
 		window = null;
 		renderer = null;
 		mouseFocus = false;
@@ -41,11 +41,11 @@ public:
 		clear = Colour(0,0,0);
 	}
 
-	public ~this() {
+	~this() {
 		Free();
 	}
 
-	public bool Init(int width, int height, const string name, const Colour clear) {
+	bool Init(int width, int height, const string name, const Colour clear) {
 		window = SDL_CreateWindow(name.toStringz, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
 
@@ -79,7 +79,7 @@ public:
 		return !!window && !!renderer;
 	}
 
-	public void HandleEvent(ref SDL_Event e){
+	void HandleEvent(ref SDL_Event e){
 		if(e.type == SDL_WINDOWEVENT && e.window.windowID == windowID) {
 			bool updateCaption = false;
 
@@ -166,23 +166,23 @@ public:
 		}
 	}
 
-	public void Clear() {
+	void Clear() {
 		if(!minimized) {
 			SDL_SetRenderDrawColor(renderer, clear.r, clear.g, clear.b, clear.a);
 			SDL_RenderClear(renderer);
 		}
 	}
 
-	public void Render() {
+	void Render() {
 		if(!minimized) SDL_RenderPresent(renderer);
 	}
 
-	public void Focus() {
+	void Focus() {
 		if(!shown) SDL_ShowWindow(window);
 		SDL_RaiseWindow(window);
 	}
 
-	public void Free() {
+	void Free() {
 		if(renderer) SDL_DestroyRenderer(renderer);
 		if(window) SDL_DestroyWindow(window);
 
@@ -195,39 +195,39 @@ public:
 		height = 0;
 	}
 
-	public void SetSize(int x, int y) {
+	void SetSize(int x, int y) {
 		SDL_SetWindowSize(window, x, y);
 	}
 
-	public SDL_Window* Inst() @property {
+	SDL_Window* Inst() @property {
 		return window;
 	}
 
-	public SDL_Renderer* Renderer() @property {
+	SDL_Renderer* Renderer() @property {
 		return renderer;
 	}
 
-	public int Width() const @property {
+	int Width() const @property {
 		return width;
 	}
 
-	public int Height() const @property{
+	int Height() const @property{
 		return height;
 	}
 
-	public bool HasMouseFocus() const @property {
+	bool HasMouseFocus() const @property {
 		return mouseFocus;
 	}
 
-	public bool HasKeyboardFocus() const @property {
+	bool HasKeyboardFocus() const @property {
 		return keyboardFocus;
 	}
 
-	public bool IsMinimized() const @property {
+	bool IsMinimized() const @property {
 		return minimized;
 	}
 
-	public bool IsShown() const @property {
+	bool IsShown() const @property {
 		return shown;
 	}
 }

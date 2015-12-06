@@ -78,7 +78,10 @@ public:
 			quad.w = clip.w;
 			quad.h = clip.h;
 		}
+
+		SDL_RenderSetScale(window.Renderer, scale, scale);
 		SDL_RenderCopyEx(window.Renderer, texture, clip, &quad, 0, null, SDL_FLIP_NONE);
+		SDL_RenderSetScale(window.Renderer, 1, 1);
 	}
 
 	void CreateBlank(int width, int height, Window window, SDL_TextureAccess access = SDL_TEXTUREACCESS_STREAMING){

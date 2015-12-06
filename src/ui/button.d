@@ -17,6 +17,7 @@ private:
 	SDL_Rect pos;
 	Texture image = null;
 	bool isSelected = false;
+	SDL_Rect imgSect;
 
 public:
 	Colour fillColour;
@@ -37,8 +38,14 @@ public:
 		pos = position;
 	}
 
-	void SetImage(string image){
+	void SetImage(string image, SDL_Rect section){
 		this.image = App.Inst.TextureMan().Get(image);
+		this.imgSect = section;
+	}
+
+	void SetImage(Texture image, SDL_Rect section) {
+		this.image = image;
+		this.imgSect = section;
 	}
 
 	// Member functions
@@ -71,7 +78,7 @@ public:
 		SDL_RenderSetScale(window.Renderer, 1, 1);
 		
 		if(image) {
-			image.Render(pos.x, pos.y, window, null);
+			image.Render(pos.x, pos.y, window, &imgSect, scale);
 		}
 
 		if(isSelected) {

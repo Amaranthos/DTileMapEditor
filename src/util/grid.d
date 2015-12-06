@@ -2,6 +2,8 @@ module util.grid;
 
 import std.stdio;
 
+import util.log;
+
 public class Grid(T) {
 private:
 	T[] grid_;
@@ -28,10 +30,8 @@ public:
 		this.row = row;
 		this.bucketSize = bucketSize;
 
-		//grid_ = new T[col][row];
-
 		for(uint i = 0; i < col * row; i++){
-			grid_ ~= null;
+			grid_ ~= T.init;
 		}
 	}
 
@@ -40,16 +40,7 @@ public:
 			grid_[x + y * col] = element;
 		}
 		else {
-			Log(Level.error, "Grid index out of range!");
-		}
-	}
-
-	void Clear() {
-		foreach(i; 0..col){
-			foreach(j; 0..row){
-				delete grid_[i + j * col];
-				grid_[i + j * col] = null;
-			}
+			Log(Level.warning, "Grid index out of range!");
 		}
 	}
 }

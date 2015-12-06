@@ -13,6 +13,7 @@ import textures;
 import tiles;
 import ui;
 import math;
+import map;
 
 enum wWidth = 960;
 enum wHeight = 720;
@@ -26,7 +27,7 @@ private:
 	static App inst;
 	Window window = new Window();	
 	TextureManager textureMan = new TextureManager();
-	File file; //Logging output file, write a better logger
+	Map map;
 	bool mouseLHeld = false;
 
 	// UI elements
@@ -37,7 +38,6 @@ private:
 
 	SDL_Rect canvas = SDL_Rect(2 * tileUISepX + 2, tileUISepY1, wWidth - tileUISepX, wHeight);
 	Button[] tileButtons;
-	string selectedTile = "";
 
 	bool mouseOverCanvas = false;
 
@@ -47,8 +47,6 @@ public:
 	Window AppWindow(){
 		return window;
 	}
-
-	
 
 	TextureManager TextureMan(){
 		return textureMan;
@@ -63,10 +61,6 @@ public:
 	bool Init() {
 		Log(Level.event,"Initialising");
 
-		Log(Level.warning,"Test warning");
-
-		Log(Level.error,"Example error");
-
 		bool success = true;
 
 		if(SDL_Init(SDL_INIT_EVERYTHING) <0) {
@@ -79,9 +73,11 @@ public:
 			if(!window.Init(wWidth, wHeight, "Tile Map Editor", Colour(0,0,0))) success = false;
 		}
 
-		Log(Level.user, "Hello World!");
+		map = new Map(canvas.x, canvas.y, cast(int)(canvas.w / tileSize), cast(int)(canvas.h / tileSize), tileSize);
 
-		//tileMan.LoadTileset("maps/tileset.xml");
+		map.LoadTileset("maps/tileset.xml");
+
+		tileButtons = map.CreateButtons(tileUIPadding, tileUIPadding, tileUIPadding, tileUIPadding, false, true);
 		return success;
 	}
 
@@ -112,6 +108,7 @@ public:
 								tileButtons[j].selected = false;
 							}
 							tileButtons[i].selected = true;
+							map.SelectedTile = i;
 						}
 					}
 
@@ -147,6 +144,7 @@ public:
 
 		delete window;
 		delete textureMan;
+		delete map;
 
 		SDL_Quit();
 	}
@@ -160,48 +158,34 @@ private:
 		SDL_SetRenderDrawColor(window.Renderer, Colour.Red.r, Colour.Red.g, Colour.Red.b, Colour.Red.a);
 		SDL_RenderDrawLine(window.Renderer, 2 * tileUISepX, tileUISepY1, 2 * tileUISepX, tileUISepY2);
 
-		if(mouseOverCanvas && selectedTile != ""){
+		if(mouseOverCanvas){
 			int x, y = 0;
 			SDL_GetMouseState(&x, &y);
 
 			x -= canvas.x;
 			y -= canvas.y;
 
-			x /= 32;
-			y /= 32;
+			x /= tileSize;
+			y /= tileSize;
 
-			//Tile* tile = tileMan.Get(selectedTile);
-
-			//tile.position = new Vec2(x * tileSize + canvas.x, y * tileSize + canvas.y);
-			//tile.Draw(window);
-
+			map.Tileset.Render(x * tileSize + canvas.x, y * tileSize + canvas.y, window, &map.Tiles[map.SelectedTile]);
 		}
 
-		//for(int i = 0; i < grid.cols; i++){
-		//	for(int j = 0; j < grid.rows; j++){
-		//		if(grid.grid[i + j * grid.cols]){
-		//			grid.grid[i + j * grid.cols].position = new Vec2(i * tileSize + canvas.x, j * tileSize + canvas.y);
-		//			grid.grid[i + j * grid.cols].Draw(window);
-		//		}
-		//	}
-		//}
-
-		//textureMan.Get("img/tileset.png").Render(50, 100, window, null);
+		map.Draw();
 	}
 
 	void PaintTile(){
-		if(mouseOverCanvas && selectedTile != ""){
+		if(mouseOverCanvas){
 			int x, y = 0;
 			SDL_GetMouseState(&x, &y);
 
 			x -= canvas.x;
 			y -= canvas.y;
 
-			x /= 32;
-			y /= 32;
+			x /= tileSize;
+			y /= tileSize;
 
-			//Tile tile = tileMan.Get(selectedTile);
-			//grid.Set(tileMan.Get(selectedTile), cast(uint)x, cast(uint)y);
+			map.PaintTile(x, y);
 		}
 	}
 }
