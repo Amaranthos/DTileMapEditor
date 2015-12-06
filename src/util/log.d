@@ -3,6 +3,8 @@ module util.log;
 import std.stdio;
 import std.file;
 import std.string;
+import std.datetime;
+import std.format;
 
 private {
 	__gshared File log;
@@ -48,7 +50,7 @@ void Log()() {
 
 void Log(Level, T...)(Level level, T t) {
 	writeln(t);
-	if(isLogging) log.writeln("<p class=", level, ">",t,"</p>");
+	if(isLogging) log.writeln("<p class=", level, ">", CurrentTime(),t,"</p>");
 }
 
 void LogTag(Level, Fmt, T...)(Level level, Fmt fmt, T t){
@@ -75,7 +77,7 @@ void WriteHtmlHeader(){
 	log.writeln("<head>");
 	log.writeln("<title>Log</title>");
 	log.writeln("<style>");
-	log.writeln("body{background-color: black;} .success {color: lime;} .warning {color: orange;} .error {color: red;} .event {color: yellow;} .user{color: aqua;} .update {color: white;}");
+	log.writeln("body{background-color: black;} p{margin-top: 5px; margin-bottom: 5px;} .success {color: lime;} .warning {color: orange;} .error {color: red;} .event {color: yellow;} .user{color: aqua;} .update {color: white;}");
 	log.writeln("</style>");
 	log.writeln("</head>");
 	log.writeln("<body>");	
@@ -84,4 +86,9 @@ void WriteHtmlHeader(){
 void WriteHtmlFooter() {
 	log.writeln("</body>");
 	log.writeln("</html>");
+}
+
+string CurrentTime() {
+	auto time = Clock.currTime;
+	return format("(%s/%s/%s %s:%s:%s) - ", time.day, cast(int)time.month, time.year, time.hour, time.minute, time.second);
 }

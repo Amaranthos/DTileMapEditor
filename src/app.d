@@ -48,6 +48,8 @@ public:
 		return window;
 	}
 
+	
+
 	TextureManager TextureMan(){
 		return textureMan;
 	}
@@ -60,6 +62,10 @@ public:
 
 	bool Init() {
 		Log(Level.event,"Initialising");
+
+		Log(Level.warning,"Test warning");
+
+		Log(Level.error,"Example error");
 
 		bool success = true;
 
