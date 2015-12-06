@@ -10,8 +10,11 @@ import derelict.sdl2.image;
 import derelict.util.exception;
 
 import app;
+import util.log;
 
 void main() {
+	EnableLogging(true);
+
 	try{
 		DerelictSDL2.missingSymbolCallback = (string) => ShouldThrow.No;
 		DerelictSDL2Image.missingSymbolCallback = (string) => ShouldThrow.No;
@@ -19,13 +22,18 @@ void main() {
 		DerelictSDL2.load();
 		DerelictSDL2Image.load();
 
-		if(!App.Inst.Init()) writeln("Warning: App failed to init!");
-		else App.Inst.Update();
+		if(!App.Inst.Init()) {
+			Log(Level.warning, "App failed to init!");
+		}
+		else {
+			Log(Level.success, "Initialisation successful");
+			App.Inst.Update();
+		}
 
 		App.Inst.Close();
 	}
 	catch(Exception e) {
-		writeln("Exception: ", e.msg);
+		Log(Level.error, "Exception: ", e.msg);
 		throw(e);
 	}
 }

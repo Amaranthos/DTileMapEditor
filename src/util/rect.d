@@ -1,4 +1,4 @@
-module rect;
+module util.rect;
 
 import std.algorithm;
 

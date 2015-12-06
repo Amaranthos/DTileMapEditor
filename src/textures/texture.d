@@ -7,7 +7,8 @@ import std.c.string;
 import derelict.sdl2.sdl;
 import derelict.sdl2.image;
 
-import window;
+import util.window;
+import util.log;
 
 class Texture{
 
@@ -26,7 +27,7 @@ public:
 	}
 
 	bool LoadFromFile(string path, Window window) {
-		writeln("Loading file ", path);
+		Log(Level.event, "Loading file ", path);
 		Free();
 
 		SDL_Texture* newTexture = null;
@@ -58,15 +59,15 @@ public:
 
 					SDL_UnlockTexture(newTexture);
 					pixels = null;
-					writeln("Success: Loaded image: ", path);
+					Log(Level.success, "Loaded image: ", path);
 				}
-				else writeln("Warning: Unable to create texture from image: ", path);
+				else Log(Level.warning, "Unable to create texture from image: ", path);
 				SDL_FreeSurface(format);
 			}
-			else writeln("Warning: Unable to set texture format for image: ", path);
+			else Log(Level.warning, "Unable to set texture format for image: ", path);
 			SDL_FreeSurface(load);
 		}
-		else writeln("Warning: Unable to load image: ", path);
+		else Log(Level.warning, "Unable to load image: ", path);
 		texture = newTexture;
 		return !!texture;
 	}

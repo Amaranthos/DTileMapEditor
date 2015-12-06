@@ -13,6 +13,10 @@ if [ -e build/run.obj ]; then
 	/bin/rm -f build/run.obj
 fi
 
+if [ ! -d "log" ]; then
+	mkdir log
+fi
+
 if [ -e build/run.exe ]; then
 	echo "Running new .exe"
 	build/run.exe

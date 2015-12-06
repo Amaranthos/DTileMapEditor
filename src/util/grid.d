@@ -1,4 +1,4 @@
-module grid;
+module util.grid;
 
 import std.stdio;
 
@@ -40,7 +40,7 @@ public:
 			grid_[x + y * col] = element;
 		}
 		else {
-			writeln("Error: grid index out of range!");
+			Log(Level.error, "Grid index out of range!");
 		}
 	}
 

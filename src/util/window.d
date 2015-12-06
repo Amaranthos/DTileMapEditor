@@ -1,4 +1,4 @@
-module window;
+module util.window;
 
 import std.stdio;
 import std.string : toStringz;
@@ -6,7 +6,8 @@ import std.conv : to;
 
 import derelict.sdl2.sdl;
 
-import colour;
+import util.colour;
+import util.log;
 
 class Window {
 	//Member variables
@@ -49,7 +50,7 @@ public:
 
 
 		if(window) {
-			writeln("Success: SDL window '", name, "' created!");
+			Log(Level.success, "SDL window '", name, "' created!");
 			mouseFocus = true;
 			keyboardFocus = true;
 			this.width = width;
@@ -60,19 +61,19 @@ public:
 			renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
 			if(renderer) {
-				writeln("Success: SDL renderer created from window '", name, "'!");
+				Log(Level.success, "SDL renderer created from window '", name, "'!");
 				SDL_SetRenderDrawColor(renderer, clear.r, clear.g, clear.b, clear.a);
 				windowID = SDL_GetWindowID(window);
 				displayID = SDL_GetWindowDisplayIndex(window);
 				shown = true;
 			}
 			else {
-				writeln("Warning: SDL render could not be created from window '", name, "'! SDL Error: ", SDL_GetError());
+				Log(Level.error, "SDL render could not be created from window '", name, "'! SDL Error: ", SDL_GetError());
 				Free();
 			}
 		}
 		else {
-			writeln("Warning: SDL window '", name, "' could not be created! SDL Error: ", SDL_GetError());
+			Log(Level.error, "SDL window '", name, "' could not be created! SDL Error: ", SDL_GetError());
 		}
 
 		return !!window && !!renderer;

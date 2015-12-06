@@ -6,18 +6,16 @@ import std.string;
 import derelict.sdl2.sdl;
 
 import app;
-import window;
-import colour;
+import util.window;
+import util.colour;
 import textures.texture;
 import textures.manager;
-import tiles.tile;
 import math.vec2;
 
 class Button {
 private:
 	SDL_Rect pos;
 	Texture image = null;
-	Tile tile_ = null;
 	bool isSelected = false;
 
 public:
@@ -35,20 +33,12 @@ public:
 		return pos;
 	}
 
-	const(Tile) tile() const @property{
-		return tile_;
-	}
-
 	void position(SDL_Rect position) @property{
 		pos = position;
 	}
 
 	void SetImage(string image){
 		this.image = App.Inst.TextureMan().Get(image);
-	}
-
-	void SetTile(string tile) {
-		this.tile_ = App.Inst.TileMan.Get(tile);
 	}
 
 	// Member functions
@@ -80,17 +70,16 @@ public:
 		SDL_RenderFillRect(window.Renderer, &pos);
 		SDL_RenderSetScale(window.Renderer, 1, 1);
 		
-		if(image)
+		if(image) {
 			image.Render(pos.x, pos.y, window, null);
-		else if(tile_){
-			tile_.position(new Vec2(pos.x, pos.y));
-			tile_.Draw(window, scale);
 		}
 
-		if(isSelected)
+		if(isSelected) {
 			SDL_SetRenderDrawColor(window.Renderer, selectColour.r, selectColour.g, selectColour.b, selectColour.a);
-		else
+		}
+		else {
 			SDL_SetRenderDrawColor(window.Renderer, outlineColour.r, outlineColour.g, outlineColour.b, outlineColour.a);
+		}
 
 		// Scale button outline
 		SDL_RenderSetScale(window.Renderer, scale, scale);

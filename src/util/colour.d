@@ -1,4 +1,4 @@
-module colour;
+module util.colour;
 
 struct Colour {
 	public ubyte r = 255;
