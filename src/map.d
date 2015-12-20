@@ -3,6 +3,7 @@ module map;
 import std.xml;
 import std.file;
 import std.conv;
+import std.string;
 
 import derelict.sdl2.sdl;
 
@@ -33,6 +34,7 @@ public:
 	void SelectedTile(int tile) @property {
 		if(tile >= 0 && tile < tiles.length){
 			selectedTile = tile;
+			Log(Level.user, "Selected tile: ", tile);
 		}
 		else {
 			Log(Level.user, "Selected out of range: ", tile);
@@ -49,6 +51,10 @@ public:
 
 	SDL_Rect[] Tiles() @property {
 		return tiles;
+	}
+
+	SDL_Rect MapRect() const @property {
+		return SDL_Rect(posX, posY, width * tileSize, height * tileSize);
 	}
 
 	this(uint positionX, uint positionY, uint mapWidth, uint mapHeight, uint mapTileSize) {
@@ -111,6 +117,14 @@ public:
 			else Log(Level.warning, "Could not read file: ", path);
 		}
 		else Log(Level.warning, "Invalid path");
+	}
+
+	void LoadMap(string path) {
+
+	}
+
+	void SaveMap(string path) {
+
 	}
 
 	Button[] CreateButtons(int startX, int startY, int padX, int padY, bool incrX, bool incrY) {

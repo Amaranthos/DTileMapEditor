@@ -10,10 +10,10 @@ import derelict.sdl2.sdl;
 
 import util;
 import textures;
-import tiles;
 import ui;
 import math;
 import map;
+import camera;
 
 enum wWidth = 960;
 enum wHeight = 720;
@@ -25,7 +25,7 @@ class App {
 private:
 	// Member variables
 	static App inst;
-	Window window = new Window();	
+	Window window = new Window();
 	TextureManager textureMan = new TextureManager();
 	Map map;
 	bool mouseLHeld = false;
@@ -36,10 +36,19 @@ private:
 	enum tileUISepY1 = 0;
 	enum tileUISepY2 = wHeight;
 
-	SDL_Rect canvas = SDL_Rect(2 * tileUISepX + 2, tileUISepY1, wWidth - tileUISepX, wHeight);
+	SDL_Rect canvas = SDL_Rect(0, 0, mapWidth * tileSize, mapHeight * tileSize);
+	Camera canvasCam = new Camera(SDL_Rect(2 * tileUISepX + 2, tileUISepY1, wWidth - tileUISepX, wHeight), new Vec2(0,0));
 	Button[] tileButtons;
 
 	bool mouseOverCanvas = false;
+
+	// Files
+	string tileSetPath = "maps/tileset.xml";
+	string mapPath = "maps/level0.map";
+
+	// Map settings
+	int mapWidth = 10;
+	int mapHeight = 10;
 
 
 public:
@@ -75,7 +84,7 @@ public:
 
 		map = new Map(canvas.x, canvas.y, cast(int)(canvas.w / tileSize), cast(int)(canvas.h / tileSize), tileSize);
 
-		map.LoadTileset("maps/tileset.xml");
+		map.LoadTileset(tileSetPath);
 
 		tileButtons = map.CreateButtons(tileUIPadding, tileUIPadding, tileUIPadding, tileUIPadding, false, true);
 		return success;
@@ -154,6 +163,9 @@ private:
 		foreach(i; 0..tileButtons.length){
 			tileButtons[i].Render(window, 2);
 		}
+
+		SDL_SetRenderDrawColor(window.Renderer, Colour.Blue.r, Colour.Blue.g, Colour.Blue.b, Colour.Blue.a);
+		SDL_RenderDrawRect(window.Renderer, new SDL_Rect(map.MapRect.x - 1, map.MapRect.y - 1, map.MapRect.w + 2, map.MapRect.h + 2));
 
 		SDL_SetRenderDrawColor(window.Renderer, Colour.Red.r, Colour.Red.g, Colour.Red.b, Colour.Red.a);
 		SDL_RenderDrawLine(window.Renderer, 2 * tileUISepX, tileUISepY1, 2 * tileUISepX, tileUISepY2);

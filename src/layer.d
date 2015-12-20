@@ -30,7 +30,7 @@ public:
 		delete layer;
 	}
 
-	void SetTile(uint x, uint y, int tile) {
+	void SetTile(int tile, uint x, uint y) {
 		layer.Set(tile, x, y);
 	}
 
@@ -48,7 +48,7 @@ public:
 			for(int j = 0; j < layer.rows; j++) {
 				int index = layer.grid[i + j * layer.cols];
 				if(index >= 0 && index < tiles.length) {
-					tileset.Render(i * tileSize, j * tileSize, App.Inst.AppWindow, &tiles[1]);
+					tileset.Render(i * tileSize + xOffset, j * tileSize + yOffset, App.Inst.AppWindow, &tiles[index]);
 				}
 			}
 		}
